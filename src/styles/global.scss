@@ -1,0 +1,72 @@
+//修改全局输入框的样式
+.el-form {
+  .el-form-item {
+    .el-form-item__content {
+      .el-select {
+        width: 200px;
+      }
+      .el-input {
+        width: 200px;
+        .el-input__inner {
+          height: 30px;
+          border-radius: 0;
+        }
+      }
+      .el-date-editor {
+        width: 100%;
+      }
+
+      .el-date-editor {
+        height: 30px;
+        line-height: 30px;
+        border-radius: 0;
+
+        .el-input__icon {
+          line-height: 22px;
+        }
+
+        .el-range-separator {
+          line-height: 22px;
+        }
+      }
+      .el-textarea {
+        width: 200px;
+      }
+    }
+  }
+}
+
+
+// 修改按钮公共样式
+.el-button {
+  padding: 0px 15px;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  border-radius: 0;
+}
+
+//dialog 按钮
+.el-dialog__body {
+  .dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 10px;
+  }
+}
+
+// //解决表头不对齐
+// .body {
+//   .el-main {
+//     .i-table{
+//       .el-table {
+//         th {
+//           .gutter{
+//             display: table-cell
+//           }
+//         }
+//       }
+//     }
+//   }
+// }
+  
