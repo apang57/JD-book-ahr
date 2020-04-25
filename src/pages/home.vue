@@ -6,9 +6,8 @@
         <el-popover
           placement="top"
           trigger="hover"
-          width="100"
           >
-          <el-button @click="loginOut">退出登陆</el-button>
+          <el-button @click="loginOut" style="width:150px">退出登陆</el-button>
           <!-- <el-button slot="reference">hover 激活</el-button> -->
           <div class="user-info" slot="reference">
             <el-avatar :size="50" :src="role.userPictureUrl" v-show="role.userPictureUrl"></el-avatar>
