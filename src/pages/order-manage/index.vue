@@ -131,13 +131,20 @@ export default {
       selectOpt: 0,
       versionList: '',
       orderCodeList: '',
+      //       1.订单取消,
+      // 2.取消到货(未到货), 3.订单到货(默认)
+      // 4.取消已取货(未取货), 5.订单已取货
+      // 6.确认取货 7.待评价 8.已评价
+
       stateOpts: [
-        {label: '已下单', value: 0},
-        {label: '已取消', value: 1},
-        {label: '已到货', value: 2},
-        {label: '已取货', value: 3},
-        {label: '已完成未评价', value: 4},
-        {label: '已完成已评价', value: 5}
+        {label: '订单取消', value: 1},
+        {label: '未到货', value: 2},
+        {label: '订单到货', value: 3},
+        {label: '未取货', value: 4},
+        {label: '已取货', value: 5},
+        {label: '确认取货', value: 6},
+        {label: '待评价', value: 7},
+        {label: '已评价', value: 8}
       ],
       payOpts: [
         {label: '未支付', value: 1},
@@ -164,7 +171,7 @@ export default {
           btnName: '订单取消',
           type: 'primary',
           func: () => {
-            if (this.selectOpt !== 1) {
+            if (this.selectOpt === 0) {
               this.dialogWarnVisible = true
               this.warnTitle = '订单取消'
             } else {
@@ -180,11 +187,11 @@ export default {
           btnName: '订单到货',
           type: 'primary',
           func: () => {
-            if (this.selectOpt !== 1) {
+            if (this.selectOpt === 0) {
               this.dialogWarnVisible = true
               this.warnTitle = '订单到货'
             } else {
-              this.updatetateOrder(2)
+              this.updatetateOrder(3)
               console.log('订单到货')
             }
           }
@@ -193,11 +200,11 @@ export default {
           btnName: '取消到货',
           type: 'primary',
           func: () => {
-            if (this.selectOpt !== 1) {
+            if (this.selectOpt === 0) {
               this.dialogWarnVisible = true
               this.warnTitle = '取消到货'
             } else {
-              this.updatetateOrder(3)
+              this.updatetateOrder(2)
               console.log('取消到货')
             }
           }
@@ -206,11 +213,11 @@ export default {
           btnName: '订单已取货',
           type: 'primary',
           func: () => {
-            if (this.selectOpt !== 1) {
+            if (this.selectOpt === 0) {
               this.dialogWarnVisible = true
               this.warnTitle = '订单已取货'
             } else {
-              this.updatetateOrder(4)
+              this.updatetateOrder(5)
               console.log('订单已取货')
             }
           }
@@ -219,11 +226,11 @@ export default {
           btnName: '取消已取货',
           type: 'primary',
           func: () => {
-            if (this.selectOpt !== 1) {
+            if (this.selectOpt === 0) {
               this.dialogWarnVisible = true
               this.warnTitle = '取消已取货'
             } else {
-              this.updatetateOrder(5)
+              this.updatetateOrder(4)
               console.log('取消已取货')
             }
           }
@@ -392,7 +399,7 @@ export default {
       req('updatetateOrder', {
         orderCodeList: this.orderCodeList,
         versionList: this.versionList,
-        orderstate: state
+        orderState: state
       }).then(data => {
         if (data.code === 0) {
           this.$message({

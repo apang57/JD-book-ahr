@@ -57,7 +57,7 @@
     <!-- 嵌套dialog -->
     <i-dialog-child
       v-model="dialogChildVisible"
-      :title="dialoChildTitle"
+      :title="dialogChildTitle"
       @dialog-Child-Submit="dialogSubmit"
       @dialog-Child-Cancel="dialogCancel"
       @before-Dialog-Child-Close="beforeDialogClose"
@@ -174,7 +174,7 @@ export default {
       dialogVisible: false,
       dialogChildVisible: false,
       dialogTitle: '新增热门位商品',
-      dialoChildTitle: '',
+      dialogChildTitle: '',
       dialogNumberVisible: false,
       dialogWarnVisible: false,
       rows: '',
@@ -299,7 +299,7 @@ export default {
   },
   methods: {
     fetch () {
-      if (this.dialoChildTitle === '热门位商品选择') {
+      if (this.dialogChildTitle === '热门位商品选择') {
         this.pageChildInfo.pageSize = 5
         this.pageChildInfo.pageNum = 1
       } else {
@@ -313,7 +313,7 @@ export default {
     },
 
     handleSizeChange (value) {
-      if (this.dialoChildTitle === '热门位商品选择') {
+      if (this.dialogChildTitle === '热门位商品选择') {
         console.log('每页显示', value)
         this.pageChildInfo.pageSize = value
       } else {
@@ -324,7 +324,7 @@ export default {
     },
 
     handleCurrentChange (value) {
-      if (this.dialoChildTitle === '热门位商品选择') {
+      if (this.dialogChildTitle === '热门位商品选择') {
         console.log('每页显示', value)
         this.pageChildInfo.pageNum = value
       } else {
@@ -338,7 +338,7 @@ export default {
       this.rows = rows
       console.log('rows:', rows)
       if (rows.length !== 0) {
-        if (this.dialoChildTitle === '热门位商品选择') {
+        if (this.dialogChildTitle === '热门位商品选择') {
           this.dialogFormData.goodCode = rows[0].goodCode
         } else {
           this.dialogFormData.hotGoodCode = rows[0].hotGoodCode
@@ -347,15 +347,28 @@ export default {
       this.selectOpt = rows.length
     },
     dialogSubmit () {
-      if (this.dialoChildTitle === '热门位商品选择') {
+      console.log()
+      if (this.dialogChildTitle === '热门位商品选择') {
         // this.$refs.formChild.resetFields()
         if (this.selectOpt !== 1) {
-          console.log('修改时row', this.selectOpt)
+          console.log('热门位商品选择时row', this.selectOpt)
           this.dialogWarnVisible = true
         } else {
           this.dialogChildVisible = false
-          this.dialoChildTitle = ''
+          this.dialogChildTitle = ''
         }
+      } else if (this.dialogTitle === '修改热门商品') {
+        this.$refs.form.validate((valid) => {
+          if (valid) {
+            this.editTableData()
+            this.$refs.form.resetFields()
+            this.dialogVisible = false
+            console.log('submit!')
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
       } else {
         this.$refs.form.validate((valid) => {
           if (valid) {
@@ -383,11 +396,11 @@ export default {
       })
     },
     dialogCancel () {
-      if (this.dialoChildTitle === '热门位商品选择') {
+      if (this.dialogChildTitle === '热门位商品选择') {
         console.log('dialogChildCancel')
         // this.$refs.formChild.resetFields()
         this.dialogChildVisible = false
-        this.dialoChildTitle = ''
+        this.dialogChildTitle = ''
       } else {
         console.log('dialogCancel')
         this.$refs.form.resetFields()
@@ -395,10 +408,10 @@ export default {
       }
     },
     beforeDialogClose () {
-      if (this.dialoChildTitle === '热门位商品选择') {
+      if (this.dialogChildTitle === '热门位商品选择') {
         console.log('beforeDialogChildClose')
         // this.$refs.formChild.resetFields()
-        this.dialoChildTitle = ''
+        this.dialogChildTitle = ''
       } else {
         console.log('beforeDialogClose')
         this.$refs.form.resetFields()
@@ -406,7 +419,7 @@ export default {
     },
     chooseBtn () {
       console.log('选择商品')
-      this.dialoChildTitle = '热门位商品选择'
+      this.dialogChildTitle = '热门位商品选择'
       this.formChildData.goodName = ''
       this.formChildData.goodCode = ''
       this.getTableData()
@@ -414,7 +427,7 @@ export default {
     },
     // 查询
     getTableData () {
-      if (this.dialoChildTitle === '热门位商品选择') {
+      if (this.dialogChildTitle === '热门位商品选择') {
         // 查询商品
         req('getTableChildData', {
           ...this.formChildData,
