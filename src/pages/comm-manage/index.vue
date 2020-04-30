@@ -180,7 +180,8 @@ export default {
         goodName: '',
         ad: '',
         publish: '',
-        author: ''
+        author: '',
+        goodState: 0
       },
       dialogVisible: false,
       dialogTitle: '',
@@ -192,6 +193,7 @@ export default {
       versionList: '',
       parentCode: '0',
       stateOpts: [
+        {label: '全部', value: 0},
         {label: '在售', value: 1},
         {label: '已下架', value: 2},
         {label: '未发布', value: 3}

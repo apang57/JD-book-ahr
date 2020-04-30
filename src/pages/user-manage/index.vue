@@ -92,7 +92,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="用户密码" prop="userPassword">
-              <el-input v-model="dialogFormData.userPassword"></el-input>
+              <el-input v-model="dialogFormData.userPassword" type="password"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -186,7 +186,8 @@ export default {
     return {
       formData: {
         userName: '',
-        userAcct: ''
+        userAcct: '',
+        role: 0
       },
       selectOpt: 0,
       dialogVisible: false,
@@ -243,6 +244,7 @@ export default {
         }
       ],
       roleOpts: [
+        {label: '全部', value: 0},
         {label: '管理员', value: 1},
         {label: '店长', value: 2},
         {label: '司机', value: 3}

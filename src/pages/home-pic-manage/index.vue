@@ -209,9 +209,9 @@ export default {
       imgSrc: '',
       showViewer: false, // 显示查看器
       stateOpts: [
+        {label: '全部', value: '0'},
         {label: '启用', value: '1'},
-        {label: '禁用', value: '2'},
-        {label: '全部', value: '0'}
+        {label: '禁用', value: '2'}
       ],
       goodStateOpts: [
         {label: '在售', value: 1},

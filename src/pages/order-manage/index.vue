@@ -121,7 +121,8 @@ export default {
         buyerName: '',
         buyerTel: '',
         payStart: '',
-        payStop: ''
+        payStop: '',
+        orderState: 0
       },
       detailVisible: false,
       detailTitle: '',
@@ -137,12 +138,13 @@ export default {
       // 6.确认取货 7.待评价 8.已评价
 
       stateOpts: [
+        {label: '全部', value: 0},
         {label: '订单取消', value: 1},
         {label: '未到货', value: 2},
         {label: '订单到货', value: 3},
         {label: '未取货', value: 4},
         {label: '已取货', value: 5},
-        {label: '确认取货', value: 6},
+        // {label: '确认取货', value: 6},
         {label: '待评价', value: 7},
         {label: '已评价', value: 8}
       ],
