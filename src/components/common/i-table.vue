@@ -16,8 +16,12 @@
         border
         :data="tableData"
         @selection-change="handleSelectionChange"
+        :row-style="{height:'60px'}"
+        :cell-style="{padding:'2px'}"
+        max-height="450px"
         >
         <el-table-column
+          fixed
           v-if="selectionShow"
           type="selection"
           width="55"

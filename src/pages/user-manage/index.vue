@@ -10,7 +10,7 @@
       <el-form-item label="角色" prop="role">
         <el-select name="" id="" v-model="formData.role">
           <el-option
-          v-for="item in roleOpts"
+          v-for="item in roleOpts_select"
           :key="item.value"
           :label="item.label"
           :value="item.value"
@@ -34,7 +34,9 @@
         :label="item.label"
         :prop="item.prop"
         align="center"
-        :formatter="columnFormatter">
+        :formatter="columnFormatter"
+        :width="item.width"
+        :show-overflow-tooltip="true">
       </el-table-column>
     </i-table>
     <i-dialog
@@ -243,8 +245,13 @@ export default {
           }
         }
       ],
-      roleOpts: [
+      roleOpts_select: [
         {label: '全部', value: 0},
+        {label: '管理员', value: 1},
+        {label: '店长', value: 2},
+        {label: '司机', value: 3}
+      ],
+      roleOpts: [
         {label: '管理员', value: 1},
         {label: '店长', value: 2},
         {label: '司机', value: 3}
@@ -254,13 +261,13 @@ export default {
         {label: '女', value: 2}
       ],
       columnList: [
-        {label: '编号', prop: 'userCode'},
+        {label: '编号', prop: 'userCode', width: 200},
         {label: '账号', prop: 'userAcct'},
         {label: '姓名', prop: 'userName'},
-        {label: '角色', prop: 'role', distName: 'roleOpts'},
-        {label: '性别', prop: 'sex', distName: 'sexOpts'},
-        {label: '手机', prop: 'tel'},
-        {label: '邮箱', prop: 'mail'},
+        {label: '角色', prop: 'role', distName: 'roleOpts', width: 80},
+        {label: '性别', prop: 'sex', distName: 'sexOpts', width: 60},
+        {label: '手机', prop: 'tel', width: 150},
+        {label: '邮箱', prop: 'mail', width: 180},
         {label: '身份证', prop: 'idcard'}
       ],
       tableData: [
@@ -355,12 +362,8 @@ export default {
         if (valid) {
           if (this.dialogTitle === '新增用户') {
             this.addTableData()
-            this.$refs.form.resetFields()
-            this.dialogVisible = false
           } else if (this.dialogTitle === '修改用户') {
             this.editTableData()
-            this.$refs.form.resetFields()
-            this.dialogVisible = false
           }
           console.log('submit!')
         } else {
@@ -418,13 +421,14 @@ export default {
       }).then(data => {
         console.log('data', data.msg)
         if (data.code === 0) {
+          this.$refs.form.resetFields()
+          this.dialogVisible = false
           this.$message({
             type: 'success',
             message: data.msg
           })
           // this.fetch()
           this.getTableData()
-          sessionStorage.setItem('addInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',
@@ -440,14 +444,13 @@ export default {
       }).then(data => {
         console.log('data', data.msg)
         if (data.code === 0) {
+          this.$refs.form.resetFields()
+          this.dialogVisible = false
           this.$message({
             type: 'success',
             message: data.msg
           })
           this.fetch()
-          this.$refs.form.resetFields()
-          this.dialogVisible = false
-          sessionStorage.setItem('EditInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',
@@ -467,7 +470,6 @@ export default {
             message: data.msg
           })
           this.fetch()
-          sessionStorage.setItem('deleteInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',

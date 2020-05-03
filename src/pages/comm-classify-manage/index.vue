@@ -193,12 +193,8 @@ export default {
         if (valid) {
           if (this.dialogTitle === '修改分类') {
             this.editTableData()
-            this.$refs.form.resetFields()
-            this.dialogVisible = false
           } else {
             this.addTableData()
-            this.$refs.form.resetFields()
-            this.dialogVisible = false
           }
           console.log('submit!')
         } else {
@@ -242,13 +238,14 @@ export default {
       }).then(data => {
         console.log('data', data.msg)
         if (data.code === 0) {
+          this.$refs.form.resetFields()
+          this.dialogVisible = false
           this.$message({
             type: 'success',
             message: data.msg
           })
           // this.fetch()
           this.selectLevel()
-          sessionStorage.setItem('addInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',
@@ -264,6 +261,8 @@ export default {
       }).then(data => {
         console.log('data', data.msg)
         if (data.code === 0) {
+          this.$refs.form.resetFields()
+          this.dialogVisible = false
           this.$message({
             type: 'success',
             message: data.msg
@@ -271,7 +270,6 @@ export default {
           this.selectLevel()
           this.$refs.form.resetFields()
           this.dialogVisible = false
-          sessionStorage.setItem('addInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',
@@ -291,7 +289,6 @@ export default {
             message: data.msg
           })
           this.selectLevel()
-          sessionStorage.setItem('deleteInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',

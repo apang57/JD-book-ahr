@@ -53,7 +53,10 @@
         :label="item.label"
         :prop="item.prop"
         :formatter="columnFormatter"
-        align="center">
+        align="center"
+        :width="item.width"
+        :show-overflow-tooltip="true"
+        >
       </el-table-column>
     </i-table>
     <!-- 详情dialog -->
@@ -239,14 +242,14 @@ export default {
         }
       ],
       columnList: [
-        {label: '订单编码', prop: 'orderCode'},
+        {label: '订单编码', prop: 'orderCode', width: 200},
         {label: '订单总价', prop: 'allPrice'},
-        {label: '订单状态', prop: 'orderState', distName: 'stateOpts'},
-        {label: '支付状态', prop: 'isPay', distName: 'payOpts'},
-        {label: '门店编码', prop: 'storeCode'},
+        {label: '订单状态', prop: 'orderState', distName: 'stateOpts', width: 80},
+        {label: '支付状态', prop: 'isPay', distName: 'payOpts', width: 80},
+        {label: '门店编码', prop: 'storeCode', width: 200},
         {label: '下单人姓名', prop: 'buyerName'},
         {label: '下单人手机号', prop: 'buyerTel'},
-        {label: '确认付款时间', prop: 'payTime'}
+        {label: '确认付款时间', prop: 'payTime', width: 200}
       ],
       columnDetailList: [
         {label: '用户编码', prop: 'userCode'},
@@ -335,19 +338,19 @@ export default {
         this.$refs.form.resetFields()
       }
     },
-    dialogSubmit () {
-      this.$refs.form.validate((valid) => {
-        if (valid) {
-          this.addTableData()
-          this.$refs.form.resetFields()
-          this.dialogVisible = false
-          console.log('submit!')
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
+    // dialogSubmit () {
+    //   this.$refs.form.validate((valid) => {
+    //     if (valid) {
+    //       this.addTableData()
+    //       this.$refs.form.resetFields()
+    //       this.dialogVisible = false
+    //       console.log('submit!')
+    //     } else {
+    //       console.log('error submit!!')
+    //       return false
+    //     }
+    //   })
+    // },
     detailClose () {
       console.log('dialogClose')
       this.detailTitle = ''
@@ -409,7 +412,6 @@ export default {
             message: data.msg
           })
           this.getTableData()
-          sessionStorage.setItem('deleteInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',

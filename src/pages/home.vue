@@ -95,6 +95,9 @@ export default {
       display: flex;
       height: 60px;
       align-items: center;
+      border-left: 2px solid #ddd;
+      padding: 0 20px;
+      color: rgb(86,163,254);
       .el-avatar {
         margin-right: 10px;
       }

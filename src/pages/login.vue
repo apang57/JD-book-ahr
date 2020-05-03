@@ -7,7 +7,7 @@
           <el-input v-model="formData.username" placeholder="请输入账号"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input type="password" v-model="formData.password" placeholder="请输入密码" ></el-input>
+          <el-input type="password" v-model="formData.password" @keyup.enter.native="login" placeholder="请输入密码" ></el-input>
         </el-form-item>
       </el-form>
       <el-button @click="login" class="login-btn" type="primary">登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录</el-button>
@@ -51,7 +51,6 @@ export default {
               'Content-Type': 'application/x-www-form-urlencoded;'
             }
           }).then(data => {
-            console.log(data)
             if (data.data.code === 0) {
               this.$message({
                 type: 'success',
@@ -85,6 +84,16 @@ export default {
             this.$router.push({path: '/home'})
           } else if (data.data.role === 2) {
             this.$router.push({path: '/client-manage'})
+          } else {
+            console.log('roleOut')
+            this.$message({
+              type: 'error',
+              message: '权限不足！'
+            })
+            // this.$router.push({path: '/login'})
+            sessionStorage.clear('userInfo')
+            sessionStorage.clear('roleInfo')
+            return false
           }
         } else {
           this.$message({

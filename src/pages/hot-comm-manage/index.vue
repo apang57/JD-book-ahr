@@ -22,7 +22,9 @@
         :key="index"
         :label="item.label"
         :prop="item.prop"
-        align="center">
+        align="center"
+        :width="item.width"
+        :show-overflow-tooltip="true">
       </el-table-column>
     </i-table>
     <i-dialog
@@ -93,6 +95,8 @@
                 :label="item.label"
                 :prop="item.prop"
                 align="center"
+                :width="item.width"
+                :show-overflow-tooltip="true"
                 :formatter="columnFormatter">
               </el-table-column>
             </i-table>
@@ -135,6 +139,7 @@
       width="30%"
     >
       <span v-if="dialogTitle ==='修改热门商品'">请选择一条需修改的数据</span>
+      <span v-else-if="dialogChildTitle === '热门位商品选择'">请选择一个商品</span>
       <span v-else>请至少选择一个热门商品删除</span>
       <!-- <span v-show="this.selectOpt < 1">请选择一条需修改的数据</span> -->
       <span slot="footer" class="dialog-footer">
@@ -247,14 +252,14 @@ export default {
         }
       ],
       columnList: [
-        {label: '排序', prop: 'hotSort'},
+        {label: '排序', prop: 'hotSort', width: 50},
         {label: '商品编号', prop: 'goodCode'},
         {label: '商品名称', prop: 'goodName'},
         {label: '商品价格', prop: 'sellPrice'},
-        {label: '商品介绍', prop: 'goodIntroduce'}
+        {label: '商品介绍', prop: 'goodIntroduce', width: 500}
       ],
       columnChildList: [
-        {label: '商品编号', prop: 'goodCode'},
+        {label: '商品编号', prop: 'goodCode', width: 200},
         {label: '商品名称', prop: 'goodName'},
         {label: '商品状态', prop: 'goodState', distName: 'goodStateOpts'},
         {label: '一级分类', prop: 'levelOneName'},
@@ -361,8 +366,6 @@ export default {
         this.$refs.form.validate((valid) => {
           if (valid) {
             this.editTableData()
-            this.$refs.form.resetFields()
-            this.dialogVisible = false
             console.log('submit!')
           } else {
             console.log('error submit!!')
@@ -373,8 +376,6 @@ export default {
         this.$refs.form.validate((valid) => {
           if (valid) {
             this.addTableData()
-            this.$refs.form.resetFields()
-            this.dialogVisible = false
             console.log('submit!')
           } else {
             console.log('error submit!!')
@@ -474,13 +475,14 @@ export default {
       }).then(data => {
         console.log('data', data.msg)
         if (data.code === 0) {
+          this.$refs.form.resetFields()
+          this.dialogVisible = false
           this.$message({
             type: 'success',
             message: data.msg
           })
           // this.fetch()
           this.getTableData()
-          sessionStorage.setItem('addInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',
@@ -500,7 +502,6 @@ export default {
             message: data.msg
           })
           this.fetch()
-          sessionStorage.setItem('deleteInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',
@@ -517,6 +518,8 @@ export default {
       }).then(data => {
         console.log('data', data.msg)
         if (data.code === 0) {
+          this.$refs.form.resetFields()
+          this.dialogVisible = false
           this.$message({
             type: 'success',
             message: data.msg
@@ -524,7 +527,6 @@ export default {
           this.fetch()
           this.$refs.form.resetFields()
           this.dialogVisible = false
-          sessionStorage.setItem('addInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',
@@ -540,7 +542,6 @@ export default {
         this.dialogNumFormData.showNumber = data.data.showNumber
         this.dialogNumFormData.version = data.data.version
         // console.log(this.dialogNumFormData.showNumber)
-        sessionStorage.setItem('addInfo', JSON.stringify(data.data))
       })
     },
     // 修改热门数量
@@ -555,7 +556,6 @@ export default {
             message: data.msg
           })
           this.dialogNumberVisible = false
-          sessionStorage.setItem('addInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',

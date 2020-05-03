@@ -160,12 +160,8 @@ export default {
         if (valid) {
           if (this.dialogTitle === '新增菜单') {
             this.addTableData()
-            this.$refs.form.resetFields()
-            this.dialogVisible = false
           } else {
             this.updateMenu()
-            this.$refs.form.resetFields()
-            this.dialogVisible = false
           }
           console.log('submit!')
         } else {
@@ -217,13 +213,14 @@ export default {
       }).then(data => {
         console.log('data', data.msg)
         if (data.code === 0) {
+          this.$refs.form.resetFields()
+          this.dialogVisible = false
           this.$message({
             type: 'success',
-            message: data.msg
+            message: data.msg + '，重新登陆后生效！'
           })
           // this.fetch()
           this.getTableData()
-          sessionStorage.setItem('addInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',
@@ -239,16 +236,17 @@ export default {
       }).then(data => {
         console.log('data', data.msg)
         if (data.code === 0) {
+          this.$refs.form.resetFields()
+          this.dialogVisible = false
           this.$message({
             type: 'success',
-            message: data.msg
+            message: data.msg + '，重新登陆后生效！'
           })
           this.getTableData()
           console.log('clickData', this.clickData.menuCode)
           this.selectMenu()
           this.$refs.form.resetFields()
           this.dialogVisible = false
-          sessionStorage.setItem('addInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',
@@ -265,10 +263,9 @@ export default {
         if (data.code === 0) {
           this.$message({
             type: 'success',
-            message: data.msg
+            message: data.msg + '，重新登陆后生效！'
           })
           this.getTableData()
-          sessionStorage.setItem('deleteInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',

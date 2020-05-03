@@ -21,8 +21,10 @@
         :key="index"
         :label="item.label"
         :prop="item.prop"
-        align="center">
-        <!-- :formatter="columnFormatter"> -->
+        align="center"
+        :width="item.width"
+        :show-overflow-tooltip="true"
+        :formatter="columnFormatter">
       </el-table-column>
     </i-table>
   </div>

@@ -12,7 +12,8 @@
         name="province"
         id="province"
         v-model="formData.provinceName"
-        @change="levelOneChange">
+        @change="levelOneChange"
+        >
           <el-option
             v-for="item in provinceOpts"
             :key="item.value"
@@ -75,7 +76,9 @@
         :label="item.label"
         :prop="item.prop"
         align="center"
-        :formatter="columnFormatter">
+        :formatter="columnFormatter"
+        :width="item.width"
+        :show-overflow-tooltip="true">
       </el-table-column>
     </i-table>
     <i-dialog
@@ -139,8 +142,8 @@
           <el-col :span="12">
             <el-form-item label="所在省份" prop="provinceName" >
               <el-select
-              name="province"
-              id="province"
+              name="dialogProvince"
+              id="dialogProvince"
               v-model="dialogFormData.provinceName"
               @change="levelOneChange">
                 <el-option
@@ -156,8 +159,8 @@
           <el-col :span="12">
             <el-form-item label="所在城市" prop="downtownName">
               <el-select
-              name="downtown"
-              id="downtown"
+              name="dialogDowntown"
+              id="dialogDowntown"
               v-model="dialogFormData.downtownName"
               @change="levelTwoChange">
                 <el-option
@@ -173,8 +176,8 @@
           <el-col :span="12">
             <el-form-item label="所在区" prop="areaName">
               <el-select
-              name="area"
-              id="area"
+              name="dialogArea"
+              id="dialogArea"
               v-model="dialogFormData.areaName"
               @change="levelThreeChange">
                 <el-option
@@ -486,6 +489,9 @@ export default {
     this.listArea(0)
   },
   methods: {
+    // click () {
+    //   this.listArea(0)
+    // },
     fetch () {
       this.pageInfo.pageSize = 5
       this.pageInfo.pageNum = 1
@@ -494,7 +500,8 @@ export default {
     reset () {
       console.log('reset')
       Object.keys(this.formData).forEach(key => (this.formData[key] = ''))
-      // opts .......................................
+      this.downtownOpts = []
+      this.areaOpts = []
     },
     warnBtn () {
       this.dialogWarnVisible = false
@@ -535,12 +542,15 @@ export default {
       })
       console.log(obj.label)
       this.parentCode = value
-      this.formData.areaName = ''
-      this.formData.provinceCode = value
-      this.dialogFormData.provinceCode = value
-      this.dialogFormData.provinceName = obj.label
-      this.dialogFormData.downtownName = ''
-      this.dialogFormData.areaName = ''
+      if (this.dialogTitle !== '新增司机') {
+        this.formData.areaName = ''
+        this.formData.provinceCode = value
+      } else {
+        this.dialogFormData.provinceCode = value
+        this.dialogFormData.provinceName = obj.label
+        this.dialogFormData.downtownName = ''
+        this.dialogFormData.areaName = ''
+      }
       this.areaOpts = []
       this.listArea(1)
     },
@@ -552,10 +562,13 @@ export default {
         return item.value === value
       })
       this.parentCode = value
-      this.formData.downtownCode = value
-      this.dialogFormData.downtownCode = value
-      this.dialogFormData.downtownName = obj.label
-      this.dialogFormData.areaName = ''
+      if (this.dialogTitle !== '新增司机') {
+        this.formData.downtownCode = value
+      } else {
+        this.dialogFormData.downtownCode = value
+        this.dialogFormData.downtownName = obj.label
+        this.dialogFormData.areaName = ''
+      }
       this.listArea(2)
     },
     // 三级select改变
@@ -567,9 +580,12 @@ export default {
       })
       console.log(obj.label)
       this.parentCode = value
-      this.formData.areaCode = value
-      this.dialogFormData.areaCode = value
-      this.dialogFormData.areaName = obj.label
+      if (this.dialogTitle !== '新增司机') {
+        this.formData.areaCode = value
+      } else {
+        this.dialogFormData.areaCode = value
+        this.dialogFormData.areaName = obj.label
+      }
       this.listArea(3)
     },
     dialogSubmit () {
@@ -577,12 +593,8 @@ export default {
         if (valid) {
           if (this.dialogTitle === '新增司机') {
             this.addTableData()
-            this.$refs.form.resetFields()
-            this.dialogVisible = false
           } else if (this.dialogTitle === '修改司机') {
             this.editTableData()
-            this.$refs.form.resetFields()
-            this.dialogVisible = false
           }
           Object.keys(this.formData).forEach(key => (this.formData[key] = ''))
           // this.provinceOpts = []
@@ -601,7 +613,7 @@ export default {
       this.$refs.form.resetFields()
       this.dialogVisible = false
       this.dialogTitle = ''
-      this.provinceOpts = []
+      // this.provinceOpts = []
       this.downtownOpts = []
       this.areaOpts = []
     },
@@ -609,7 +621,8 @@ export default {
       console.log('beforeDialogClose')
       this.$refs.form.resetFields()
       this.dialogTitle = ''
-      this.provinceOpts = []
+      console.log('dialogFormData:', this.dialogFormData)
+      // this.provinceOpts = []
       this.downtownOpts = []
       this.areaOpts = []
     },
@@ -636,7 +649,6 @@ export default {
           pageNum: this.pageInfo.pageNum
         }).then(data => {
           this.tableData = data.data.list
-          // this.dialogFormData.version = data.data.list
           this.pageInfo.pageNum = data.data.pageNum
           this.pageInfo.pageSize = data.data.pageSize
           this.pageInfo.total = data.data.total
@@ -719,13 +731,14 @@ export default {
       }).then(data => {
         console.log('data', data.msg)
         if (data.code === 0) {
+          this.$refs.form.resetFields()
+          this.dialogVisible = false
           this.$message({
             type: 'success',
             message: data.msg
           })
           // this.fetch()
           this.getTableData()
-          sessionStorage.setItem('addInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',
@@ -742,6 +755,8 @@ export default {
       }).then(data => {
         console.log('data', data.msg)
         if (data.code === 0) {
+          this.$refs.form.resetFields()
+          this.dialogVisible = false
           this.$message({
             type: 'success',
             message: data.msg
@@ -749,7 +764,6 @@ export default {
           this.fetch()
           this.$refs.form.resetFields()
           this.dialogVisible = false
-          sessionStorage.setItem('addInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',
@@ -769,7 +783,6 @@ export default {
             message: data.msg
           })
           this.fetch()
-          sessionStorage.setItem('deleteInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',

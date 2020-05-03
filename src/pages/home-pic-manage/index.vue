@@ -140,6 +140,8 @@
                 :label="item.label"
                 :prop="item.prop"
                 align="center"
+                :width="item.width"
+                :show-overflow-tooltip="true"
                 :formatter="columnFormatter">
               </el-table-column>
             </i-table>
@@ -310,7 +312,7 @@ export default {
         {label: '有效期止', prop: 'dateStop'}
       ],
       columnChildList: [
-        {label: '商品编号', prop: 'goodCode'},
+        {label: '商品编号', prop: 'goodCode', width: 200},
         {label: '商品名称', prop: 'goodName'},
         {label: '商品状态', prop: 'goodState', distName: 'goodStateOpts'},
         {label: '一级分类', prop: 'levelOneName'},
@@ -443,8 +445,6 @@ export default {
             this.dialogFormData.dateStop = moment(this.dialogFormData.dateStop).format('YYYY-MM-DD')
             console.log(this.dialogFormData.dateStart + '---' + this.dialogFormData.dateStop)
             this.addTableData()
-            this.$refs.form.resetFields()
-            this.dialogVisible = false
             console.log('submit!')
           } else {
             console.log('error submit!!')
@@ -531,13 +531,14 @@ export default {
       }).then(data => {
         console.log('data', data.msg)
         if (data.code === 0) {
+          this.$refs.form.resetFields()
+          this.dialogVisible = false
           this.$message({
             type: 'success',
             message: data.msg
           })
           // this.fetch()
           this.getTableData()
-          sessionStorage.setItem('addInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',
@@ -557,7 +558,6 @@ export default {
             message: data.msg
           })
           this.fetch()
-          sessionStorage.setItem('deleteInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',
@@ -595,7 +595,6 @@ export default {
             message: data.msg
           })
           this.getTableData()
-          sessionStorage.setItem('deleteInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',

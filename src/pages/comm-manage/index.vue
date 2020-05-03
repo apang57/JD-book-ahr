@@ -40,6 +40,8 @@
         :label="item.label"
         :prop="item.prop"
         align="center"
+        :width="item.width"
+        :show-overflow-tooltip="true"
         :formatter="columnFormatter">
       </el-table-column>
     </i-table>
@@ -281,21 +283,21 @@ export default {
         }
       ],
       columnList: [
-        {label: '商品名称', prop: 'goodName'},
-        {label: '作者', prop: 'author'},
-        {label: '出版社', prop: 'publish'},
+        {label: '商品名称', prop: 'goodName', width: 150},
+        {label: '作者', prop: 'author', width: 150},
+        {label: '出版社', prop: 'publish', width: 150},
         {label: '售价', prop: 'sellPrice'},
         {label: '销售量', prop: 'sellVolume'},
         {label: '一级分类', prop: 'levelOneName'},
         {label: '二级分类', prop: 'levelTwoName'},
-        {label: '广告词', prop: 'ad'},
-        {label: '商品介绍', prop: 'goodIntroduce'},
+        {label: '广告词', prop: 'ad', width: 250},
+        {label: '商品介绍', prop: 'goodIntroduce', width: 250},
         {label: '商品状态', prop: 'goodState', distName: 'stateOpts'},
-        {label: '上架时间', prop: 'getGoodDate'},
+        {label: '上架时间', prop: 'getGoodDate', width: 200},
         {label: '浏览量', prop: 'browseVolume'},
-        {label: '商家名称', prop: 'businessName'},
+        {label: '商家名称', prop: 'businessName', width: 150},
         {label: '库存', prop: 'stock'},
-        {label: 'isbn书号', prop: 'isbn'}
+        {label: 'isbn书号', prop: 'isbn', width: 200}
       ],
       tableData: [
       ],
@@ -432,12 +434,8 @@ export default {
         if (valid) {
           if (this.dialogTitle === '新增商品') {
             this.addTableData()
-            this.$refs.form.resetFields()
-            this.dialogVisible = false
           } else if (this.dialogTitle === '修改商品') {
             this.editTableData()
-            this.$refs.form.resetFields()
-            this.dialogVisible = false
           }
           console.log('submit!')
         } else {
@@ -520,13 +518,14 @@ export default {
       }).then(data => {
         console.log('data', data.msg)
         if (data.code === 0) {
+          this.$refs.form.resetFields()
+          this.dialogVisible = false
           this.$message({
             type: 'success',
             message: data.msg
           })
           // this.fetch()
           this.getTableData()
-          sessionStorage.setItem('addInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',
@@ -537,11 +536,14 @@ export default {
     },
     // 修改
     editTableData () {
+      console.log('dialogFormData:', this.dialogFormData)
       req('editTableData', {
         ...this.dialogFormData
       }).then(data => {
         console.log('data', data.msg)
         if (data.code === 0) {
+          this.$refs.form.resetFields()
+          this.dialogVisible = false
           this.$message({
             type: 'success',
             message: data.msg
@@ -549,7 +551,6 @@ export default {
           this.getTableData()
           this.$refs.form.resetFields()
           this.dialogVisible = false
-          sessionStorage.setItem('addInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',
@@ -569,7 +570,6 @@ export default {
             message: data.msg
           })
           this.fetch()
-          sessionStorage.setItem('deleteInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',
@@ -607,7 +607,6 @@ export default {
             message: data.msg
           })
           this.fetch()
-          sessionStorage.setItem('deleteInfo', JSON.stringify(data.data))
         } else {
           this.$message({
             type: 'error',
