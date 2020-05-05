@@ -10,7 +10,7 @@
           <el-input type="password" v-model="formData.password" @keyup.enter.native="login" placeholder="请输入密码" ></el-input>
         </el-form-item>
       </el-form>
-      <el-button @click="login" class="login-btn" type="primary">登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录</el-button>
+      <el-button @click="login" class="login-btn" type="primary" :loading="loginLoading">登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录</el-button>
     </div>
   </div>
 </template>
@@ -35,12 +35,14 @@ export default {
         password: [
           { required: true, message: '请输入密码', trigger: 'change' }
         ]
-      }
+      },
+      loginLoading: false
     }
   },
   methods: {
     login () {
       this.$refs.form.validate((valid) => {
+        this.loginLoading = true
         if (valid) {
           console.log('submit!')
           axios({
@@ -60,6 +62,7 @@ export default {
               this.topColumnUserData()
               // this.$router.push({path: '/home'})
             } else {
+              this.loginLoading = false
               this.$message({
                 type: 'error',
                 message: data.data.msg
@@ -80,6 +83,7 @@ export default {
         console.log(data)
         if (data.code === 0) {
           sessionStorage.setItem('roleInfo', JSON.stringify(data.data))
+          this.loginLoading = false
           if (data.data.role === 1) {
             this.$router.push({path: '/home'})
           } else if (data.data.role === 2) {

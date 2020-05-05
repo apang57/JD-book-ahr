@@ -64,6 +64,7 @@
       </el-form-item>
     </i-search>
     <i-table
+      v-loading="tableLoading"
       :toolbar="toolbar"
       :tableData="tableData"
       @handleSizeChange="handleSizeChange"
@@ -189,6 +190,7 @@
       @Detail-Close="detailClose"
       >
       <i-table
+        v-loading="tableDetailLoading"
         :tableData="tableDetailData"
         @handleSizeChange="handleSizeChange"
         @handleCurrentChange="handleCurrentChange"
@@ -250,6 +252,8 @@ export default {
       }
     }
     return {
+      tableLoading: false,
+      tableDetailLoading: false,
       formData: {
         provinceName: '',
         downtownName: '',
@@ -482,7 +486,7 @@ export default {
       })
       console.log(obj.label)
       this.parentCode = value
-      if (this.dialogTitle !== '新增门店') {
+      if (this.dialogTitle !== '新增门店' && this.dialogTitle !== '修改门店') {
         this.formData.areaName = ''
         this.formData.provinceCode = value
       } else {
@@ -502,7 +506,7 @@ export default {
         return item.value === value
       })
       this.parentCode = value
-      if (this.dialogTitle !== '新增门店') {
+      if (this.dialogTitle !== '新增门店' && this.dialogTitle !== '修改门店') {
         this.formData.downtownCode = value
       } else {
         this.dialogFormData.downtownCode = value
@@ -520,7 +524,7 @@ export default {
       })
       console.log(obj.label)
       this.parentCode = value
-      if (this.dialogTitle !== '新增门店') {
+      if (this.dialogTitle !== '新增门店' && this.dialogTitle !== '修改门店') {
         this.formData.areaCode = value
       } else {
         this.dialogFormData.areaCode = value
@@ -577,11 +581,14 @@ export default {
     getTableData () {
       console.log('this.detailTitle', this.detailTitle)
       if (this.detailTitle === '门店详情') {
+        this.tableDetailLoading = true
         req('getTableData', {
         }).then(data => {
+          this.tableDetailLoading = false
           console.log('门店详情', data)
         })
       } else {
+        this.tableLoading = true
         req('getTableData', {
           ...this.formData,
           pageSize: this.pageInfo.pageSize,
@@ -592,6 +599,7 @@ export default {
           this.pageInfo.pageNum = data.data.pageNum
           this.pageInfo.pageSize = data.data.pageSize
           this.pageInfo.total = data.data.total
+          this.tableLoading = false
         })
       }
     },

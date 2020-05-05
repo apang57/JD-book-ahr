@@ -26,6 +26,7 @@
       </el-form-item>
     </i-search>
     <i-table
+      v-loading="tableLoading"
       :toolbar="toolbar"
       :tableData="tableData"
       @handleSizeChange="handleSizeChange"
@@ -177,7 +178,24 @@ export default {
     IFile
   },
   data () {
+    var validatePrice = (rule, value, callback) => {
+      let reg = /(^[1-9]([0-9]{1,4})?(\.[0-9]{1,2})?$)|(^(0){1}$)|(^[0-9]\.[0-9]([0-9])?$)/
+      if (!reg.test(value)) {
+        callback(new Error('请输入正确的价格'))
+      } else {
+        callback()
+      }
+    }
+    var validateNumber = (rule, value, callback) => {
+      const reg = /^[1-9][0-9]*$/
+      if (!reg.test(value)) {
+        callback(new Error('请输入正整数'))
+      } else {
+        callback()
+      }
+    }
     return {
+      tableLoading: false,
       formData: {
         goodName: '',
         ad: '',
@@ -342,9 +360,9 @@ export default {
         levelOneName: [
           { required: true, message: '请选择一级分类', trigger: 'change' }
         ],
-        // levelTwoName: [
-        //   { required: true, message: '请选择二级分类', trigger: 'change' }
-        // ],
+        levelTwoName: [
+          { required: true, message: '请选择二级分类', trigger: 'change' }
+        ],
         // ad: [
         //   { required: true, message: '请输入广告词', trigger: 'change' }
         // ],
@@ -358,10 +376,12 @@ export default {
           { required: true, message: '请选择商家名称', trigger: 'change' }
         ],
         stock: [
-          { required: true, message: '请输入商品库存', trigger: 'change' }
+          { required: true, message: '请输入商品库存', trigger: 'change' },
+          { validator: validateNumber, trigger: 'change' }
         ],
         sellPrice: [
-          { required: true, message: '请输入商品销售价', trigger: 'change' }
+          { required: true, message: '请输入商品销售价', trigger: 'change' },
+          { validator: validatePrice, trigger: 'change' }
         ]
       }
     }
@@ -455,6 +475,7 @@ export default {
     },
     // 查询
     getTableData () {
+      this.tableLoading = true
       req('getTableData', {
         ...this.formData,
         pageSize: this.pageInfo.pageSize,
@@ -465,6 +486,7 @@ export default {
         this.pageInfo.pageNum = data.data.pageNum
         this.pageInfo.pageSize = data.data.pageSize
         this.pageInfo.total = data.data.total
+        this.tableLoading = false
       })
     },
     // 查询详细信息

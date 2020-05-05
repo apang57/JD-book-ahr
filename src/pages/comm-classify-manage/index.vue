@@ -13,6 +13,7 @@
       <tr style="height: 450px; vertical-align: top; width: 40%">
         <td>
           <el-tree
+            v-loading="tableLoading"
             :data="treeData"
             :props="defaultProps"
             @node-click="handleNodeClick"
@@ -90,6 +91,7 @@ export default {
   },
   data () {
     return {
+      tableLoading: false,
       treeData: [
       ],
       defaultProps: {
@@ -214,8 +216,10 @@ export default {
     },
     // 查询分类
     selectLevel () {
+      this.tableLoading = true
       req('selectLevel', {}).then(data => {
         this.treeData = data.data
+        this.tableLoading = false
         console.log('data:', this.treeData)
       })
     },

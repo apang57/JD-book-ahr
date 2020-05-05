@@ -20,6 +20,7 @@
       </el-form-item>
     </i-search>
     <i-table
+      v-loading="tableLoading"
       :toolbar="toolbar"
       :tableData="tableData"
       @handleSizeChange="handleSizeChange"
@@ -186,6 +187,7 @@ export default {
       }
     }
     return {
+      tableLoading: false,
       formData: {
         userName: '',
         userAcct: '',
@@ -211,11 +213,11 @@ export default {
           btnName: '修改',
           type: 'primary',
           func: () => {
+            this.dialogTitle = '修改用户'
             if (this.selectOpt !== 1) {
               console.log('修改时row', this.selectOpt)
               this.dialogWarnVisible = true
             } else {
-              this.dialogTitle = '修改用户'
               this.dialogVisible = true
               this.selectUserData()
             }
@@ -393,11 +395,13 @@ export default {
 
     // 查询
     getTableData () {
+      this.tableLoading = true
       req('getTableData', {
         ...this.formData,
         pageSize: this.pageInfo.pageSize,
         pageNum: this.pageInfo.pageNum
       }).then(data => {
+        this.tableLoading = false
         this.tableData = data.data.list
         this.pageInfo.pageNum = data.data.pageNum
         this.pageInfo.pageSize = data.data.pageSize

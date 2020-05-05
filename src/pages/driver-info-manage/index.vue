@@ -62,6 +62,7 @@
       </el-form-item>
     </i-search>
     <i-table
+      v-loading="tableLoading"
       :toolbar="toolbar"
       :tableData="tableData"
       @handleSizeChange="handleSizeChange"
@@ -113,7 +114,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="密码" prop="driverPassword">
-              <el-input v-model="dialogFormData.driverPassword"></el-input>
+              <el-input v-model="dialogFormData.driverPassword" type="password"></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -206,6 +207,7 @@
       @Detail-Close="detailClose"
       >
       <i-table
+        v-loading="tableDetailLoading"
         :tableData="tableDetailData"
         @handleSizeChange="handleSizeChange"
         @handleCurrentChange="handleCurrentChange"
@@ -293,6 +295,8 @@ export default {
       }
     }
     return {
+      tableDetailLoading: false,
+      tableLoading: false,
       formData: {
         provinceName: '',
         downtownName: '',
@@ -542,7 +546,7 @@ export default {
       })
       console.log(obj.label)
       this.parentCode = value
-      if (this.dialogTitle !== '新增司机') {
+      if (this.dialogTitle !== '新增司机' && this.dialogTitle !== '修改司机') {
         this.formData.areaName = ''
         this.formData.provinceCode = value
       } else {
@@ -562,7 +566,7 @@ export default {
         return item.value === value
       })
       this.parentCode = value
-      if (this.dialogTitle !== '新增司机') {
+      if (this.dialogTitle !== '新增司机' && this.dialogTitle !== '修改司机') {
         this.formData.downtownCode = value
       } else {
         this.dialogFormData.downtownCode = value
@@ -580,7 +584,7 @@ export default {
       })
       console.log(obj.label)
       this.parentCode = value
-      if (this.dialogTitle !== '新增司机') {
+      if (this.dialogTitle !== '新增司机' && this.dialogTitle !== '修改司机') {
         this.formData.areaCode = value
       } else {
         this.dialogFormData.areaCode = value
@@ -638,11 +642,14 @@ export default {
     getTableData () {
       console.log('this.detailTitle', this.detailTitle)
       if (this.detailTitle === '司机详情') {
+        this.tableDetailLoading = true
         req('getTableData', {
         }).then(data => {
           console.log('司机详情', data)
+          this.tableDetailLoading = false
         })
       } else {
+        this.tableLoading = true
         req('getTableData', {
           ...this.formData,
           pageSize: this.pageInfo.pageSize,
@@ -652,6 +659,7 @@ export default {
           this.pageInfo.pageNum = data.data.pageNum
           this.pageInfo.pageSize = data.data.pageSize
           this.pageInfo.total = data.data.total
+          this.tableLoading = false
         })
       }
     },

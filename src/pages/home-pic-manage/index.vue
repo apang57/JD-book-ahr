@@ -17,6 +17,7 @@
       </el-form-item>
     </i-search>
     <i-table
+      v-loading="tableLoading"
       :toolbar="toolbar"
       :tableData="tableData"
       @handleSizeChange="handleSizeChange"
@@ -127,6 +128,7 @@
           <el-row>
             <!-- 嵌套表格 -->
             <i-table
+              v-loading="tableChildLoading"
               :tableData="tableChildData"
               @handleSizeChange="handleSizeChange"
               @handleCurrentChange="handleCurrentChange"
@@ -189,6 +191,8 @@ export default {
   },
   data () {
     return {
+      tableLoading: false,
+      tableChildLoading: false,
       formData: {
         slideshowState: '0'
       },
@@ -486,6 +490,7 @@ export default {
     // 查询
     getTableData () {
       if (this.dialoChildTitle === '轮播商品选择') {
+        this.tableChildLoading = true
         // 查询商品
         req('getTableChildData', {
           ...this.formChildData,
@@ -496,13 +501,16 @@ export default {
           this.pageChildInfo.pageNum = data.data.pageNum
           this.pageChildInfo.pageSize = data.data.pageSize
           this.pageChildInfo.total = data.data.total
+          this.tableChildLoading = false
         })
       } else {
+        this.tableLoading = true
         req('getTableData', {
           ...this.formData,
           pageSize: this.pageInfo.pageSize,
           pageNum: this.pageInfo.pageNum
         }).then(data => {
+          this.tableLoading = false
           console.log('data:', data)
           this.tableData = data.data.list
           this.pageInfo.pageNum = data.data.pageNum

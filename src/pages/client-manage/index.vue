@@ -9,6 +9,7 @@
       </el-form-item>
     </i-search>
     <i-table
+      v-loading="tableLoading"
       :tableData="tableData"
       @handleSizeChange="handleSizeChange"
       @handleCurrentChange="handleCurrentChange"
@@ -43,6 +44,7 @@ export default {
   },
   data () {
     return {
+      tableLoading: false,
       formData: {
         customerAcct: '',
         customerName: ''
@@ -98,11 +100,13 @@ export default {
     },
     // 查询
     getTableData () {
+      this.tableLoading = true
       req('getTableData', {
         ...this.formData,
         pageSize: this.pageInfo.pageSize,
         pageNum: this.pageInfo.pageNum
       }).then(data => {
+        this.tableLoading = false
         this.tableData = data.data.list
         this.pageInfo.pageNum = data.data.pageNum
         this.pageInfo.pageSize = data.data.pageSize

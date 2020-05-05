@@ -12,7 +12,7 @@
       </tr>
       <tr style="height: 450px; vertical-align: top; width: 40%">
         <td>
-          <el-menu @select="handlerSelect">
+          <el-menu @select="handlerSelect" v-loading="listLoading">
             <el-menu-item v-for="(item, index) in menuList" :index="item.code" :key="index">
               <span>{{item.title}}</span>
             </el-menu-item>
@@ -91,6 +91,7 @@ export default {
   },
   data () {
     return {
+      listLoading: false,
       menuList: [
       ],
       clickData: {
@@ -181,12 +182,14 @@ export default {
     },
     // 查询
     getTableData () {
+      this.listLoading = true
       req('getTableData', {}).then(data => {
         console.log('data:', data.data.list)
         this.menuList.splice(0)
         for (let i = 0; i < data.data.list.length; i++) {
           this.menuList.push({title: data.data.list[i].menuName, code: data.data.list[i].menuCode})
         }
+        this.listLoading = false
         console.log(this.menuList)
       })
     },

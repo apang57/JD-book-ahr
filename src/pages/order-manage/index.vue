@@ -39,6 +39,7 @@
       </el-form-item>
     </i-search>
     <i-table
+      v-loading="tableLoading"
       :toolbar="toolbar"
       :tableData="tableData"
       @handleSizeChange="handleSizeChange"
@@ -119,6 +120,7 @@ export default {
   },
   data () {
     return {
+      tableLoading: false,
       formData: {
         orderCode: '',
         buyerName: '',
@@ -358,11 +360,13 @@ export default {
     },
     // 查询
     getTableData () {
+      this.tableLoading = true
       req('getTableData', {
         ...this.formData,
         pageSize: this.pageInfo.pageSize,
         pageNum: this.pageInfo.pageNum
       }).then(data => {
+        this.tableLoading = false
         console.log('data:', data)
         this.tableData = data.data.list
         this.pageInfo.pageNum = data.data.pageNum
