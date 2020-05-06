@@ -233,13 +233,9 @@ export default {
             } else {
               console.log('删除')
               this.$confirm('此操作将永久删除此项,是否继续?').then(() => {
-                for (let i = 0; i < this.rows.length; i++) {
-                  if (i === this.rows.length - 1) {
-                    this.userCodeList += this.rows[i].userCode
-                  } else {
-                    this.userCodeList += this.rows[i].userCode + ','
-                  }
-                }
+                this.userCodeList = this.rows.map(item => {
+                  return item.userCode
+                }).toString()
                 console.log('userCodeList', this.userCodeList)
                 this.deleteTableData()
               })

@@ -231,13 +231,9 @@ export default {
               console.log('删除')
               this.$confirm('此操作将永久删除此热门商品,是否继续?').then(() => {
                 console.log('length', this.rows.length)
-                for (let i = 0; i < this.rows.length; i++) {
-                  if (i === this.rows.length - 1) {
-                    this.hotGoodCodeList += this.rows[i].hotGoodCode
-                  } else {
-                    this.hotGoodCodeList += this.rows[i].hotGoodCode + ','
-                  }
-                }
+                this.hotGoodCodeList = this.rows.map(item => {
+                  return item.hotGoodCode
+                }).toString()
                 console.log('hotGoodCodeList', this.hotGoodCodeList)
                 this.deleteTableData()
               })

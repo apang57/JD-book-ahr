@@ -393,15 +393,12 @@ export default {
       // 取List
       this.orderCodeList = ''
       this.versionList = ''
-      for (let i = 0; i < this.rows.length; i++) {
-        if (i === this.rows.length - 1) {
-          this.orderCodeList += this.rows[i].orderCode
-          this.versionList += this.rows[i].version
-        } else {
-          this.orderCodeList += this.rows[i].orderCode + ','
-          this.versionList += this.rows[i].version + ','
-        }
-      }
+      this.orderCodeList = this.rows.map(item => {
+        return item.orderCode
+      }).toString()
+      this.versionList = this.rows.map(item => {
+        return item.version
+      }).toString()
       console.log('orderCodeList', this.orderCodeList)
       console.log('versionList', this.versionList)
       // 调接口

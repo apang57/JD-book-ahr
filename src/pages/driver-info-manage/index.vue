@@ -339,13 +339,9 @@ export default {
               console.log('详情')
               this.detailVisible = true
               console.log('length', this.rows.length)
-              for (let i = 0; i < this.rows.length; i++) {
-                if (i === this.rows.length - 1) {
-                  this.driverCodeList += this.rows[i].driverCode
-                } else {
-                  this.driverCodeList += this.rows[i].driverCode + ','
-                }
-              }
+              this.driverCodeList = this.rows.map(item => {
+                return item.driverCode
+              }).toString()
               console.log('driverCodeList', this.driverCodeList)
               this.selectDriver()
             }
@@ -391,13 +387,9 @@ export default {
               console.log('删除')
               this.$confirm('此操作将永久删除此项,是否继续?').then(() => {
                 console.log('length', this.rows.length)
-                for (let i = 0; i < this.rows.length; i++) {
-                  if (i === this.rows.length - 1) {
-                    this.driverCodeList += this.rows[i].driverCode
-                  } else {
-                    this.driverCodeList += this.rows[i].driverCode + ','
-                  }
-                }
+                this.driverCodeList = this.rows.map(item => {
+                  return item.driverCode
+                }).toString()
                 console.log('driverCodeList', this.driverCodeList)
                 this.deleteTableData()
               })

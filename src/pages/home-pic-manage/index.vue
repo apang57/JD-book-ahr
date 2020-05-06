@@ -265,13 +265,9 @@ export default {
               console.log('删除')
               this.$confirm('此操作将永久删除此项,是否继续?').then(() => {
                 console.log('length', this.rows.length)
-                for (let i = 0; i < this.rows.length; i++) {
-                  if (i === this.rows.length - 1) {
-                    this.slideshowCodeList += this.rows[i].slideshowCode
-                  } else {
-                    this.slideshowCodeList += this.rows[i].slideshowCode + ','
-                  }
-                }
+                this.slideshowCodeList = this.rows.map(item => {
+                  return item.slideshowCode
+                }).toString()
                 console.log('slideshowCodeList', this.slideshowCodeList)
                 this.deleteTableData()
               })
@@ -580,15 +576,12 @@ export default {
       // 取List
       this.slideshowCodeList = ''
       this.versionList = ''
-      for (let i = 0; i < this.rows.length; i++) {
-        if (i === this.rows.length - 1) {
-          this.slideshowCodeList += this.rows[i].slideshowCode
-          this.versionList += this.rows[i].version
-        } else {
-          this.slideshowCodeList += this.rows[i].slideshowCode + ','
-          this.versionList += this.rows[i].version + ','
-        }
-      }
+      this.slideshowCodeList = this.rows.map(item => {
+        return item.slideshowCode
+      }).toString()
+      this.versionList = this.rows.map(item => {
+        return item.version
+      }).toString()
       console.log('slideshowCodeList', this.slideshowCodeList)
       console.log('versionList', this.versionList)
       // 调接口

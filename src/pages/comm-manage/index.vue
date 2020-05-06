@@ -258,13 +258,9 @@ export default {
             } else {
               console.log('删除')
               this.$confirm('此操作将永久删除此项,是否继续?').then(() => {
-                for (let i = 0; i < this.rows.length; i++) {
-                  if (i === this.rows.length - 1) {
-                    this.goodCodeList += this.rows[i].goodCode
-                  } else {
-                    this.goodCodeList += this.rows[i].goodCode + ','
-                  }
-                }
+                this.goodCodeList = this.rows.map(item => {
+                  return item.goodCode
+                }).toString()
                 console.log('goodCodeList', this.goodCodeList)
                 this.deleteTableData()
               })
@@ -395,10 +391,6 @@ export default {
       this.pageInfo.pageNum = 1
       this.getTableData()
     },
-    // search () {
-    //   console.log('search')
-    //   console.log(this.formData)
-    // },
     reset () {
       console.log('reset')
     },
@@ -494,10 +486,6 @@ export default {
       req('selectGood', {
         goodCode: this.dialogFormData.goodCode
       }).then(data => {
-        console.log('data:111111111', data)
-        // this.$nextTick(function () {
-        //   this.dialogFormData = Object.assign({}, data.data)
-        // })
         this.parentCode = '0'
         this.selectLevel()
         this.dialogFormData = Object.assign({}, data.data)
@@ -606,15 +594,12 @@ export default {
       // 取List
       this.goodCodeList = ''
       this.versionList = ''
-      for (let i = 0; i < this.rows.length; i++) {
-        if (i === this.rows.length - 1) {
-          this.goodCodeList += this.rows[i].goodCode
-          this.versionList += this.rows[i].version
-        } else {
-          this.goodCodeList += this.rows[i].goodCode + ','
-          this.versionList += this.rows[i].version + ','
-        }
-      }
+      this.goodCodeList = this.rows.map(item => {
+        return item.goodCode
+      }).toString()
+      this.versionList = this.rows.map(item => {
+        return item.version
+      }).toString()
       console.log('goodCodeList', this.goodCodeList)
       console.log('versionList', this.versionList)
       // 调接口
