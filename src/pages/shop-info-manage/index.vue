@@ -344,6 +344,8 @@ export default {
                 }).toString()
                 console.log('storeCodeList', this.storeCodeList)
                 this.deleteTableData()
+              }).catch(() => {
+                console.log('取消')
               })
             }
           }

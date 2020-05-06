@@ -236,6 +236,8 @@ export default {
                 }).toString()
                 console.log('hotGoodCodeList', this.hotGoodCodeList)
                 this.deleteTableData()
+              }).catch(() => {
+                console.log('取消')
               })
             }
           }

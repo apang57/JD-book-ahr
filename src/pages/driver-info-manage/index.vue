@@ -392,6 +392,8 @@ export default {
                 }).toString()
                 console.log('driverCodeList', this.driverCodeList)
                 this.deleteTableData()
+              }).catch(() => {
+                console.log('取消')
               })
             }
           }

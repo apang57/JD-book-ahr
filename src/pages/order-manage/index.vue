@@ -186,6 +186,8 @@ export default {
               this.$confirm('此操作将永久取消此订单,是否继续?').then(() => {
                 this.updatetateOrder(1)
                 console.log('确定')
+              }).catch(() => {
+                console.log('取消')
               })
             }
           }

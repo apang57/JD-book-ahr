@@ -270,6 +270,8 @@ export default {
                 }).toString()
                 console.log('slideshowCodeList', this.slideshowCodeList)
                 this.deleteTableData()
+              }).catch(() => {
+                console.log('取消')
               })
             }
           }

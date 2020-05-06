@@ -177,6 +177,8 @@ export default {
         this.$confirm('此操作将永久删除此分类,是否继续?').then(() => {
           console.log('确定')
           this.deleteTableData()
+        }).catch(() => {
+          console.log('取消')
         })
       }
     },

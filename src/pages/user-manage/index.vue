@@ -238,6 +238,8 @@ export default {
                 }).toString()
                 console.log('userCodeList', this.userCodeList)
                 this.deleteTableData()
+              }).catch(() => {
+                console.log('取消')
               })
             }
           }

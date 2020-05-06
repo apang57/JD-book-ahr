@@ -149,6 +149,8 @@ export default {
         this.$confirm('此操作将永久删除此菜单,是否继续?').then(() => {
           this.deleteTableData()
           console.log('确定')
+        }).catch(() => {
+          console.log('取消')
         })
       }
     },
